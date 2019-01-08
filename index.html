@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+ .mainBars{
+    shape-rendering: auto;
+    fill-opacity: 1;
+    stroke-width: 0.5px;
+    stroke: rgb(0, 0, 0);
+    stroke-opacity: 0;
+  }
+    .subBars{
+    shape-rendering:crispEdges;
+    }
+    .edges{
+    stroke:none;
+    fill-opacity:0.3;
+    }
+    .label{
+    color:#000000;
+    }
+
+
+
+</style>
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script src="http://vizjs.org/viz.v1.3.0.min.js"></script>
+
+<script>
+var data=[["plant1","bee1",3,6],
+["plant2","bee1",6,9],
+["plant3","bee1",0,3],
+["plant4","bee1",4,0],
+["plant5","bee1",0,0],
+["plant1","bee2",0,0],
+["plant2","bee2",0,2],
+["plant3","bee2",7,0],
+["plant4","bee2",0,0],
+["plant5","bee2",0,0],
+["plant1","bee3",0,0],
+["plant2","bee3",0,0],
+["plant3","bee3",0,0],
+["plant4","bee3",0,7],
+["plant5","bee3",2,0]]
+
+
+
+ function sort(sortOrder){
+                    return function(a,b){ return d3.ascending(sortOrder.indexOf(a),sortOrder.indexOf(b)) }
+                  }
+var color = {'Unlinked ':'#3366CC','bee1':'#7FC97F','bee2':'#BEAED4','bee3':'#FDC086'};
+
+
+
+
+var g1 = svg.append("g").attr("transform","translate(188,50)");
+                         var bp1=viz.bP()
+                         .data(data)
+                         .value(d=>d[2])
+                         .min(10)
+                         .pad(1)
+                         .height(400)
+                         .width(200)
+                         .barSize(35)
+                         .fill(d=>color[d.secondary])
+.orient("vertical");
+
+g1.call(bp1);g1.append("text")
+                        .attr("x",-50).attr("y",-8)
+                        .style("text-anchor","middle")
+                        .text("Primary");
+                        g1.append("text")
+                        .attr("x", 250)
+                        .attr("y",-8).style("text-anchor","middle")
+                        .text("Secondary");
+                        g1.append("text")
+                        .attr("x",100).attr("y",-25)
+                        .style("text-anchor","middle")
+                        .attr("class","header")
+                        .text("bog");
+
+ g1.selectAll(".mainBars")
+                        .on("mouseover",mouseover)
+                        .on("mouseout",mouseout);
+
+ g1.selectAll(".mainBars").append("text").attr("class","label")
+                        .attr("x",d=>(d.part=="primary"? -27.2:24.8))
+                        .attr("y",d=>+6)
+                        .text(d=>d.key)
+                        .attr("text-anchor",d=>(d.part=="primary"? "end": "start"));
+
+ g1.selectAll(".mainBars").append("text").attr("class","perc")
+                        .attr("x",d=>(d.part=="primary"? -141:144))
+                        .attr("y",d=>+6)
+                        .text(function(d){ return d3.format("0.0%")(d.percent)})
+                        .attr("text-anchor",d=>(d.part=="primary"? "end": "start")); 
+
+
+var g2 = svg.append("g").attr("transform","translate(794,50)");
+                         var bp2=viz.bP()
+                         .data(data)
+                         .value(d=>d[3])
+                         .min(10)
+                         .pad(1)
+                         .height(400)
+                         .width(200)
+                         .barSize(35)
+                         .fill(d=>color[d.secondary])
+.orient("vertical");
+
+g2.call(bp2);g2.append("text")
+                        .attr("x",-50).attr("y",-8)
+                        .style("text-anchor","middle")
+                        .text("Primary");
+                        g2.append("text")
+                        .attr("x", 250)
+                        .attr("y",-8).style("text-anchor","middle")
+                        .text("Secondary");
+                        g2.append("text")
+                        .attr("x",100).attr("y",-25)
+                        .style("text-anchor","middle")
+                        .attr("class","header")
+                        .text("meadow");
+
+ g2.selectAll(".mainBars")
+                        .on("mouseover",mouseover)
+                        .on("mouseout",mouseout);
+
+ g2.selectAll(".mainBars").append("text").attr("class","label")
+                        .attr("x",d=>(d.part=="primary"? -27.2:24.8))
+                        .attr("y",d=>+6)
+                        .text(d=>d.key)
+                        .attr("text-anchor",d=>(d.part=="primary"? "end": "start"));
+
+ g2.selectAll(".mainBars").append("text").attr("class","perc")
+                        .attr("x",d=>(d.part=="primary"? -141:144))
+                        .attr("y",d=>+6)
+                        .text(function(d){ return d3.format("0.0%")(d.percent)})
+                        .attr("text-anchor",d=>(d.part=="primary"? "end": "start")); 
+
+function mouseover(d){
+bp1.mouseover(d);
+                            g1.selectAll(".mainBars")
+                            .select(".perc")
+                            .text(function(d){ return d3.format("0.0%")(d.percent)});
+bp2.mouseover(d);
+                            g2.selectAll(".mainBars")
+                            .select(".perc")
+                            .text(function(d){ return d3.format("0.0%")(d.percent)});
+}
+
+                     function mouseout(d){
+bp1.mouseout(d);
+                            g1.selectAll(".mainBars")
+                            .select(".perc")
+                            .text(function(d){ return d3.format("0.0%")(d.percent)});
+bp2.mouseout(d);
+                            g2.selectAll(".mainBars")
+                            .select(".perc")
+                            .text(function(d){ return d3.format("0.0%")(d.percent)});
+}
+
+</script>
